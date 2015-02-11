@@ -20,5 +20,5 @@ install:
     # -- workaround end
 script:
     - cd tests
-    - sudo make
-    - sudo make run
+    - make
+    - make run
