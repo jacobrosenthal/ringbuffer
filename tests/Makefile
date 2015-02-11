@@ -14,18 +14,19 @@
 
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
-GTEST_DIR = /usr
+GTEST_SRC_DIR = /usr/src
+GTEST_INC_DIR = /usr/include
 
 # Where to find user code.
-USER_DIR = ../
+USER_DIR = ..
 
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(GTEST_DIR)/include
+CPPFLAGS += -isystem $(GTEST_INC_DIR)/gtest -I$(GTEST_INC_DIR)
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra -pthread
+CXXFLAGS += -g -Wall -Wextra -pthread -I$(GTEST_INC_DIR)
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
@@ -33,8 +34,8 @@ TESTS = test
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
-GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
-                $(GTEST_DIR)/include/gtest/internal/*.h
+GTEST_HEADERS = $(GTEST_INC_DIR)/gtest/*.h \
+                $(GTEST_INC_DIR)/gtest/internal/*.h
 
 # House-keeping build targets.
 
@@ -50,19 +51,19 @@ clean :
 
 # Usually you shouldn't tweak such internal variables, indicated by a
 # trailing _.
-GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
+GTEST_SRCS_ = $(GTEST_SRC_DIR)/gtest/src/*.cc $(GTEST_SRC_DIR)/gtest/src/*.h $(GTEST_HEADERS)
 
 # For simplicity and to avoid depending on Google Test's
 # implementation details, the dependencies specified below are
 # conservative and not optimized.  This is fine as Google Test
 # compiles fast and for ordinary users its source rarely changes.
 gtest-all.o : $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
-            $(GTEST_DIR)/src/gtest-all.cc
+	$(CXX) $(CPPFLAGS) -I$(GTEST_SRC_DIR)/gtest $(CXXFLAGS) -c \
+            $(GTEST_SRC_DIR)/gtest/src/gtest-all.cc
 
 gtest_main.o : $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
-            $(GTEST_DIR)/src/gtest_main.cc
+	$(CXX) $(CPPFLAGS) -I$(GTEST_INC_DIR)/gtest $(CXXFLAGS) -c \
+            $(GTEST_SRC_DIR)/gtest/src/gtest_main.cc
 
 gtest.a : gtest-all.o
 	$(AR) $(ARFLAGS) $@ $^
