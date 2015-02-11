@@ -19,8 +19,7 @@ install:
     - cd "${TRAVIS_BUILD_DIR}"
     # -- workaround end
 script:
-    - ls /usr/src
-    - ls /usr/src/gtest
+    - ls /usr/src/gtest/src
     - cd tests
     - make
     - make run
