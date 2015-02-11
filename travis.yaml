@@ -1,0 +1,24 @@
+language: cpp
+compiler:
+    - gcc
+before_install:
+    - if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+    - sudo add-apt-repository -y ppa:kalakris/cmake
+    - sudo apt-get update -qq
+install:
+    # g++4.8
+    - if [ "$CXX" == "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+    - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
+    - sudo apt-get install -qq libtclap-dev libboost-dev cmake
+    - sudo apt-get install -qq libgtest-dev
+    #  NOTE gtest install workaround
+    - cd /usr/src/gtest
+    - sudo cmake .
+    - sudo make
+    - sudo mv libgtest* /usr/lib/
+    - cd "${TRAVIS_BUILD_DIR}"
+    # -- workaround end
+script:
+    - cd tests
+    - make
+    - make run
